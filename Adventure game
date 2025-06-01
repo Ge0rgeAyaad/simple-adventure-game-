@@ -1,0 +1,207 @@
+import time 
+import random
+
+# Global variables
+t = 0
+e = 0
+message_1="'tired,hire,iron,ride,dive'"
+message_2=" He was born in the midst of fire, and if you throw him on the ground, he collapses, what is he?:"
+message_3=" What is a thing that only walks by beating?:"
+message_4="Who is the person who sits in front of kings and presidents?:"
+score = 0
+health = 100
+snake_health = 50
+crocodile_health = 200
+dragon_health = 500
+box_list = [10, 30, 25, 50, 70, 100, 20, 35]
+
+# Function to handle invalid input
+def wrong():
+    print("Invalid data")
+
+# Function to handle invalid input or capitalization
+def false():
+    print("Invalid data or capitalization missing")
+
+# Function to display current score
+def points():
+    print("Your score is:", score)
+
+# Function to check if a value can be converted to an integer
+def is_integer(value):
+    try:
+        int(value)
+        return True
+    except ValueError:
+        return False
+
+def main_game():
+    global name, score, health
+    
+    print("'Welcome to Castle Adventure'")
+    
+    while True:
+        name = input("Enter your name: ")
+        if is_integer(name):
+            wrong()
+            continue
+        
+        age_input = input("Enter your age: ")
+        
+        if not age_input.isdigit():
+            wrong()
+            continue
+        
+        age = int(age_input)
+        
+        if 1 <= age <= 100:
+            break
+        elif age < 0:
+            print("Age cannot be negative")
+            time.sleep(e)
+        else:
+            wrong()
+    
+    while True:
+        success = level1()
+        if success:
+            replay = input("Do you want to replay Level 1? (yes/no): ")
+            if replay.lower() == "no":
+                print('GAME OVER')
+                exit()
+        else:
+            break
+    
+    while True:
+        success = level2()
+        if success:
+            replay = input("Do you want to replay Level 2? (yes/no): ")
+            if replay.lower() == "no":
+                print('GAME OVER')
+                exit()
+        else:
+            break
+    
+    while True:
+        restart = input("Do you want to restart the game? (yes/no): ")
+        if restart.lower() == "yes":
+            score = 0  # Reset score for a new game
+            health = 100  # Reset health for a new game
+            main_game()
+        elif restart.lower() == "no":
+            print("Thank you for playing our game")
+            break
+        else:
+            false()
+            continue
+
+def level1():
+    global score, health
+    print("'Welcome to the first level", name, "'")
+    time.sleep(e)
+    print("THE CASTLE")
+    while True:
+        play = input("Press 'X' to play the game: ")
+        if play.upper() == 'X':
+            print("'Hey", name, "You have four doors and you have a key that opens all the doors but you need to solve the message to open the right door'")
+            time.sleep(t)
+            print("The message is:", message_1)
+            break
+        else:
+            wrong()
+    time.sleep(t)
+    while True:
+        door = int(input("Enter the right number of the door (1, 2, 3, 4): "))
+        if door == 1:
+            print("You have encountered a snake with health 50 and your health is", health)
+            time.sleep(e)
+            kill = input("If you want to kill it press 'Z', if you don't want press 'Y': ")
+            if kill.upper() == "Z":
+                health -= snake_health
+                print("'Welcome to the castle", name, "'")
+                time.sleep(e)
+                print("Your health now is", health)
+                score += 20
+                points()
+                return False
+            elif kill.upper() == "Y":
+                print("You have been killed by the snake's poison")
+                return True
+            else:
+                false()
+                continue
+        elif door == 2:
+            print("You have been killed by a crocodile with health", crocodile_health)
+            return True
+        elif door == 3:
+            print("'Welcome to the castle", name, "'")
+            time.sleep(e)
+            score += 40
+            points()
+            print("Your health now is", health)
+            return False
+        elif door == 4:
+            print("You have been killed by a dragon with health", dragon_health)
+            return True
+        else:
+            wrong()
+
+def level2():
+    global score
+    time.sleep(e)
+    print("'Welcome to the next level", name, "'")
+    time.sleep(e)
+    print("THE GHOST")
+    time.sleep(t)
+    print("Hey", name, "you have to pass this level or the ghost will kill you. You have three riddles to solve. Each question has points.")
+    time.sleep(e)
+    print("Every level you will collect a letter of the mystery box. This mystery box will give you random points.")
+    time.sleep(t)
+    print("'Write the answers with capitalization'")
+    time.sleep(e)
+    m_message = input(message_2)
+    if m_message == "Glass":
+        score += 10
+        print("Perfect!")
+        points()
+        n_message = input(message_3)
+        if n_message == "Nail":
+            score += 20
+            print("perfect!")
+            points()
+            v_message = input(message_4)
+            if v_message == "Driver":
+                score += 30
+                print("perfect!")
+                points()
+                box = input("Enter the name of the box: ")
+                if box.upper() == "RED":
+                    item = random.choice(box_list)
+                    final_score = item + score
+                    print("Your final score is:", final_score)
+                    if final_score >= 80:
+                        print("Great job!")
+                        print("Thank you", name, "for joining our game")
+                        return False
+                    else:
+                        print("THE GHOST killed you")
+                        print("GAME OVER")
+                        return True
+                else:
+                    wrong()
+                    return True
+            else:
+                print("THE GHOST killed you")
+                print("GAME OVER")
+                return True
+        else:
+            print("THE GHOST killed you")
+            print("GAME OVER")
+            return True
+    else:
+        print("THE GHOST killed you")
+        print("GAME OVER")
+        return True
+
+
+main_game()
